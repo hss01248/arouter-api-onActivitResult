@@ -22,7 +22,7 @@ configurations {
     all*.exclude group: 'com.alibaba', module: 'arouter-api'
 }
 dependencies {
-	 api "com.github.hss01248:arouter-api:1.5.0"
+	 api "com.github.hss01248:arouter-api-onActivitResult:1.5.0"
 }
 ```
 
