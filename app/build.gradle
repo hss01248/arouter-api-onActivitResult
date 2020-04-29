@@ -47,7 +47,9 @@ android {
     }
 }
 
-
+configurations {
+    all*.exclude group: 'com.alibaba', module: 'arouter-api'
+}
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -59,5 +61,5 @@ dependencies {
 
     //implementation 'com.alibaba:arouter-api:1.5.0'
     annotationProcessor 'com.alibaba:arouter-compiler:1.2.2' //注解处理器，会将注解编译成Java类
-    api project(':arouter-api')
+    api "com.github.hss01248:arouter-api:1.5.0"
 }
