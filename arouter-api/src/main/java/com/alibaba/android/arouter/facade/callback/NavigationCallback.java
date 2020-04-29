@@ -40,5 +40,5 @@ public interface NavigationCallback {
      */
     void onInterrupt(Postcard postcard);
 
-    void onActivityResult(int requestCode, int resultCode,  Intent data);
+    void onActivityResult(int requestCode, int resultCode, Intent data);
 }

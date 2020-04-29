@@ -4,7 +4,6 @@ import android.app.Application;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 
-import rx_activity_result2.RxActivityResult;
 
 /**
  * time:2020/4/29

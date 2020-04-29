@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+
 import android.util.Log;
 import android.widget.Toast;
 
@@ -24,11 +25,7 @@ import com.alibaba.android.arouter.exception.NoRouteFoundException;
 import com.alibaba.android.arouter.facade.Postcard;
 import com.alibaba.android.arouter.facade.callback.InterceptorCallback;
 import com.alibaba.android.arouter.facade.callback.NavigationCallback;
-import com.alibaba.android.arouter.facade.service.AutowiredService;
-import com.alibaba.android.arouter.facade.service.DegradeService;
-import com.alibaba.android.arouter.facade.service.InterceptorService;
-import com.alibaba.android.arouter.facade.service.PathReplaceService;
-import com.alibaba.android.arouter.facade.service.PretreatmentService;
+import com.alibaba.android.arouter.facade.service.*;
 import com.alibaba.android.arouter.facade.template.ILogger;
 import com.alibaba.android.arouter.thread.DefaultPoolExecutor;
 import com.alibaba.android.arouter.utils.Consts;
@@ -40,14 +37,18 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.concurrent.ThreadPoolExecutor;
 
+import io.reactivex.functions.Consumer;
+import rx_activity_result2.Result;
 import rx_activity_result2.RxActivityResult;
 
 /**
- * time:2020/4/29
- * author:hss
- * desription:
+ * ARouter core (Facade patten)
+ *
+ * @author Alex <a href="mailto:zhilong.liu@aliyun.com">Contact me.</a>
+ * @version 1.0
+ * @since 16/8/16 14:39
  */
-public class _ARouter {
+final class _ARouter {
     static ILogger logger = new DefaultLogger(Consts.TAG);
     private volatile static boolean monitorMode = false;
     private volatile static boolean debuggable = false;
@@ -66,15 +67,15 @@ public class _ARouter {
 
     protected static synchronized boolean init(Application application) {
         mContext = application;
-        registActivityCallbacks(application);
         LogisticsCenter.init(mContext, executor);
         logger.info(Consts.TAG, "ARouter init success!");
         hasInit = true;
         mHandler = new Handler(Looper.getMainLooper());
+        registActivityCallbacks(application);
         RxActivityResult.register(application);
+
         return true;
     }
-
     private static void registActivityCallbacks(Application application) {
         application.registerActivityLifecycleCallbacks(new Application.ActivityLifecycleCallbacks() {
             @Override
@@ -231,7 +232,7 @@ public class _ARouter {
             if (null != pService) {
                 path = pService.forString(path);
             }
-            return build(path, extractGroup(path));
+            return build(path, extractGroup(path), true);
         }
     }
 
@@ -253,13 +254,15 @@ public class _ARouter {
     /**
      * Build postcard by path and group
      */
-    protected Postcard build(String path, String group) {
+    protected Postcard build(String path, String group, Boolean afterReplace) {
         if (TextUtils.isEmpty(path) || TextUtils.isEmpty(group)) {
             throw new HandlerException(Consts.TAG + "Parameter is invalid!");
         } else {
-            PathReplaceService pService = ARouter.getInstance().navigation(PathReplaceService.class);
-            if (null != pService) {
-                path = pService.forString(path);
+            if (!afterReplace) {
+                PathReplaceService pService = ARouter.getInstance().navigation(PathReplaceService.class);
+                if (null != pService) {
+                    path = pService.forString(path);
+                }
             }
             return new Postcard(path, group);
         }
@@ -397,7 +400,7 @@ public class _ARouter {
     }
 
     private Object _navigation(final Context context, final Postcard postcard, final int requestCode, final NavigationCallback callback) {
-         Context currentContext = null == context ? mContext : context;
+        Context currentContext = null == context ? mContext : context;
         if(!(currentContext instanceof Activity)){
             if(topActivity != null && topActivity.get() != null){
                 currentContext = topActivity.get();
@@ -480,7 +483,7 @@ public class _ARouter {
      *
      * @see ActivityCompat
      */
-    private void startActivity(int requestCode, Context currentContext, Intent intent, Postcard postcard, NavigationCallback callback) {
+    private void startActivity(final int requestCode, Context currentContext, Intent intent, Postcard postcard, final NavigationCallback callback) {
         /*if (requestCode >= 0) {  // Need start for result
             if (currentContext instanceof Activity) {
                 ActivityCompat.startActivityForResult((Activity) currentContext, intent, requestCode, postcard.getOptionsBundle());
@@ -493,26 +496,28 @@ public class _ARouter {
 
         if (currentContext instanceof Activity) {
             RxActivityResult.on((Activity) currentContext).startIntent(intent)
-                    .subscribe(result -> {
-                        Intent data = result.data();
-                        int resultCode = result.resultCode();
-                        // the requestCode using which the activity is started can be received here.
-                        // int requestCode = result.requestCode();
-                        if (null != callback) {
-                            callback.onActivityResult(requestCode, resultCode, data);
+                    .subscribe(new Consumer<Result<Activity>>() {
+                        @Override
+                        public void accept(Result<Activity> result) throws Exception {
+                            Intent data = result.data();
+                            int resultCode = result.resultCode();
+                            // the requestCode using which the activity is started can be received here.
+                            // int requestCode = result.requestCode();
+                            if (null != callback) {
+                                callback.onActivityResult(requestCode, resultCode, data);
+                            }
+                        }
+                    }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+                            if(debuggable){
+                                throwable.printStackTrace();
+                            }
                         }
                     });
         }else{
             ActivityCompat.startActivity(currentContext, intent, postcard.getOptionsBundle());
         }
-
-
-
-
-
-
-
-
 
         if ((-1 != postcard.getEnterAnim() && -1 != postcard.getExitAnim()) && currentContext instanceof Activity) {    // Old version.
             ((Activity) currentContext).overridePendingTransition(postcard.getEnterAnim(), postcard.getExitAnim());
@@ -522,6 +527,4 @@ public class _ARouter {
             callback.onArrival(postcard);
         }
     }
-
-
 }

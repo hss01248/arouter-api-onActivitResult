@@ -9,7 +9,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.alibaba.android.arouter.facade.Postcard;
-import com.alibaba.android.arouter.facade.callback.NavigationCallback;
+import com.alibaba.android.arouter.facade.callback.NavigationCallback2;
 import com.alibaba.android.arouter.launcher.ARouter;
 
 public class MainActivity extends AppCompatActivity {
@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
                         .withLong("key1", 666L)
                         .withString("key3", "888")
                         //.withObject("key4", new Test("Jack", "Rose"))
-                        .navigation(MainActivity.this, new NavigationCallback() {
+                        .navigation(MainActivity.this, new NavigationCallback2() {
                             @Override
                             public void onFound(Postcard postcard) {
 
