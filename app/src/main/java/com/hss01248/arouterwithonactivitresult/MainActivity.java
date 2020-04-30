@@ -51,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
                                 Log.e("onActivityResult","resultcode:"+resultCode+",data:"+data.getStringExtra("data"));
                             }
                         });
+
+                 new TransFragmentUtil<OrderFragment,Integer>(MainActivity.this,9,"orderfrag").getFragment().startOrder();
             }
         });
     }
