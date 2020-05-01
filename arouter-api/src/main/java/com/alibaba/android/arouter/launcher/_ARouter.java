@@ -16,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.FragmentActivity;
 
 import com.alibaba.android.arouter.core.InstrumentationHook;
 import com.alibaba.android.arouter.core.LogisticsCenter;
@@ -31,15 +32,14 @@ import com.alibaba.android.arouter.thread.DefaultPoolExecutor;
 import com.alibaba.android.arouter.utils.Consts;
 import com.alibaba.android.arouter.utils.DefaultLogger;
 import com.alibaba.android.arouter.utils.TextUtils;
+import com.hss01248.activityresult.StartActivityUtil;
+import com.hss01248.activityresult.TheActivityListener;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.concurrent.ThreadPoolExecutor;
 
-import io.reactivex.functions.Consumer;
-import rx_activity_result2.Result;
-import rx_activity_result2.RxActivityResult;
 
 /**
  * ARouter core (Facade patten)
@@ -72,10 +72,9 @@ final class _ARouter {
         hasInit = true;
         mHandler = new Handler(Looper.getMainLooper());
         registActivityCallbacks(application);
-        RxActivityResult.register(application);
-
         return true;
     }
+
     private static void registActivityCallbacks(Application application) {
         application.registerActivityLifecycleCallbacks(new Application.ActivityLifecycleCallbacks() {
             @Override
@@ -221,6 +220,11 @@ final class _ARouter {
         }
     }
 
+    static void afterInit() {
+        // Trigger interceptor init, use byName.
+        interceptorService = (InterceptorService) ARouter.getInstance().build("/arouter/service/interceptor").navigation();
+    }
+
     /**
      * Build postcard by path and default group
      */
@@ -287,11 +291,6 @@ final class _ARouter {
             logger.warning(Consts.TAG, "Failed to extract default group! " + e.getMessage());
             return null;
         }
-    }
-
-    static void afterInit() {
-        // Trigger interceptor init, use byName.
-        interceptorService = (InterceptorService) ARouter.getInstance().build("/arouter/service/interceptor").navigation();
     }
 
     protected <T> T navigation(Class<? extends T> service) {
@@ -401,8 +400,8 @@ final class _ARouter {
 
     private Object _navigation(final Context context, final Postcard postcard, final int requestCode, final NavigationCallback callback) {
         Context currentContext = null == context ? mContext : context;
-        if(!(currentContext instanceof Activity)){
-            if(topActivity != null && topActivity.get() != null){
+        if (!(currentContext instanceof Activity)) {
+            if (topActivity != null && topActivity.get() != null) {
                 currentContext = topActivity.get();
             }
 
@@ -483,7 +482,8 @@ final class _ARouter {
      *
      * @see ActivityCompat
      */
-    private void startActivity(final int requestCode, Context currentContext, Intent intent, Postcard postcard, final NavigationCallback callback) {
+    private void startActivity(final int requestCode, Context currentContext, Intent intent, final Postcard postcard,
+                               final NavigationCallback callback) {
         /*if (requestCode >= 0) {  // Need start for result
             if (currentContext instanceof Activity) {
                 ActivityCompat.startActivityForResult((Activity) currentContext, intent, requestCode, postcard.getOptionsBundle());
@@ -494,28 +494,28 @@ final class _ARouter {
             ActivityCompat.startActivity(currentContext, intent, postcard.getOptionsBundle());
         }*/
 
-        if (currentContext instanceof Activity) {
-            RxActivityResult.on((Activity) currentContext).startIntent(intent)
-                    .subscribe(new Consumer<Result<Activity>>() {
+        if (currentContext instanceof FragmentActivity) {
+            FragmentActivity activity = (FragmentActivity) currentContext;
+            StartActivityUtil.startActivity(activity, null, intent, requestCode != 0
+                    , new TheActivityListener<Activity>() {
                         @Override
-                        public void accept(Result<Activity> result) throws Exception {
-                            Intent data = result.data();
-                            int resultCode = result.resultCode();
-                            // the requestCode using which the activity is started can be received here.
-                            // int requestCode = result.requestCode();
-                            if (null != callback) {
+                        public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+                            super.onActivityResult(requestCode, resultCode, data);
+                            if (callback != null) {
                                 callback.onActivityResult(requestCode, resultCode, data);
                             }
                         }
-                    }, new Consumer<Throwable>() {
+
                         @Override
-                        public void accept(Throwable throwable) throws Exception {
-                            if(debuggable){
-                                throwable.printStackTrace();
+                        public void onActivityNotFound(Throwable e) {
+                            super.onActivityNotFound(e);
+                            if (callback != null) {
+                                callback.onLost(postcard);
                             }
+
                         }
                     });
-        }else{
+        } else {
             ActivityCompat.startActivity(currentContext, intent, postcard.getOptionsBundle());
         }
 
