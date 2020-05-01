@@ -1,7 +1,8 @@
 # Arouter with onActivitResult
 Arouter + onActivityResult
+[![](https://jitpack.io/v/hss01248/arouter-api-onActivitResult.svg)](https://jitpack.io/#hss01248/arouter-api-onActivitResult)
 
-enhance ARouter by [RxOnActivityResult](https://github.com/VictorAlbertos/RxActivityResult)
+enhance ARouter by [StartActivityResult](https://github.com/hss01248/StartActivityResult)
 
 get the  ActivityResult in NavigationCallback
 
@@ -65,6 +66,4 @@ NavigationCallback里增加了onActivityResult(int requestCode, int resultCode, 
                 Log.e("onActivityResult","resultcode:"+resultCode+",data:"+data.getStringExtra("data"));
             }
         });
-# Thanks
 
-use https://github.com/VictorAlbertos/RxActivityResult to receive activity result in callback
