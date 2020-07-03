@@ -69,3 +69,5 @@ NavigationCallback里增加了onActivityResult(int requestCode, int resultCode, 
             }
         });
 
+## 参考:
+https://github.com/xiaojinzi123/Component/wiki/Component-%E5%92%8C-ARouter-%E6%AF%94%E8%BE%83
