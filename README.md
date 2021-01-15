@@ -77,7 +77,7 @@ NavigationCallback里增加了onActivityResult(int requestCode, int resultCode, 
 
 # Log for IProvider and NavigationCallback:
 
-![image-20210115104656120](https://gitee.com/hss012489/picbed/raw/master/picgo/1610678821813-image-20210115104656120.jpg)
+![image-20210115111012253](https://gitee.com/hss012489/picbed/raw/master/picgo/1610680212296-image-20210115111012253.jpg)
 
 D/ARouter: HelloServiceImpl@668af7f.sayHello(Vergil), result:hello, Vergil, cost:0ms ,thread:main
 

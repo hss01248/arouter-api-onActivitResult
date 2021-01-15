@@ -3,6 +3,7 @@ package com.alibaba.android.arouter.core;
 import android.content.Context;
 import android.net.Uri;
 
+import com.alibaba.android.arouter.LogProxy;
 import com.alibaba.android.arouter.exception.HandlerException;
 import com.alibaba.android.arouter.exception.NoRouteFoundException;
 import com.alibaba.android.arouter.facade.Postcard;
@@ -304,7 +305,7 @@ public class LogisticsCenter {
                             throw new HandlerException("Init provider failed! " + e.getMessage());
                         }
                     }
-                    postcard.setProvider(instance);
+                    postcard.setProvider(LogProxy.getProxy(instance));
                     postcard.greenChannel();    // Provider should skip all of interceptors
                     break;
                 case FRAGMENT:

@@ -12,6 +12,7 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityOptionsCompat;
 import android.util.SparseArray;
 
+import com.alibaba.android.arouter.LogProxy;
 import com.alibaba.android.arouter.facade.callback.NavigationCallback;
 import com.alibaba.android.arouter.facade.model.RouteMeta;
 import com.alibaba.android.arouter.facade.service.SerializationService;

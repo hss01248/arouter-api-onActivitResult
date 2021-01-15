@@ -311,7 +311,7 @@ final class _ARouter {
 
             LogisticsCenter.completion(postcard);
             T t =  (T) postcard.getProvider();
-            return LogProxy.getProxy(t);
+            return t;
         } catch (NoRouteFoundException ex) {
             logger.warning(Consts.TAG, ex.getMessage());
             return null;
