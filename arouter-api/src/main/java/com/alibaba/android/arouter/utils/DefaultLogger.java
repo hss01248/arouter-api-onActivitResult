@@ -89,6 +89,11 @@ public class DefaultLogger implements ILogger {
         return defaultTag;
     }
 
+    @Override
+    public boolean isShowLog() {
+        return isShowLog;
+    }
+
     public static String getExtInfo(StackTraceElement stackTraceElement) {
 
         String separator = " & ";

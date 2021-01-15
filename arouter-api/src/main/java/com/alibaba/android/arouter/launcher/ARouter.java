@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.net.Uri;
 
+import com.alibaba.android.arouter.LogProxy;
 import com.alibaba.android.arouter.exception.InitException;
 import com.alibaba.android.arouter.facade.Postcard;
 import com.alibaba.android.arouter.facade.callback.NavigationCallback;
@@ -181,6 +182,6 @@ public final class ARouter {
      * @param callback    cb
      */
     public Object navigation(Context mContext, Postcard postcard, int requestCode, NavigationCallback callback) {
-        return _ARouter.getInstance().navigation(mContext, postcard, requestCode, callback);
+        return _ARouter.getInstance().navigation(mContext, postcard, requestCode, LogProxy.getProxy(callback));
     }
 }

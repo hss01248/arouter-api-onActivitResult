@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-
+apply plugin: 'com.alibaba.arouter'
 /*apply plugin: "jar-filter"
 
 jarFilters {
@@ -61,5 +61,7 @@ dependencies {
 
     //implementation 'com.alibaba:arouter-api:1.5.0'
     annotationProcessor 'com.alibaba:arouter-compiler:1.2.2' //注解处理器，会将注解编译成Java类
-    api "com.github.hss01248:arouter-api-onActivitResult:1.5.0"
+    //api "com.github.hss01248:arouter-api-onActivitResult:1.5.0"
+
+    api project(':arouter-api')
 }

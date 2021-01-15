@@ -32,4 +32,6 @@ public interface ILogger {
     boolean isMonitorMode();
 
     String getDefaultTag();
+
+    boolean isShowLog();
 }

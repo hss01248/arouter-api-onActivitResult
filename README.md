@@ -6,9 +6,11 @@ Arouter + onActivityResult
 
 enhance ARouter by [StartActivityResult](https://github.com/hss01248/StartActivityResult)
 
-get the  ActivityResult in NavigationCallback
 
 
+* get the  ActivityResult in NavigationCallback.
+
+* Add log to callback and IProvider method call.
 
 
 
@@ -16,7 +18,7 @@ get the  ActivityResult in NavigationCallback
 
 change the source code and republish ,so you have to exclude com.alibaba: arouter-api, in case of class conflict.
 
-```
+```java
 //gradle里: android同级,排除alibaba原始代码
 android{
 ...
@@ -25,7 +27,7 @@ configurations {
     all*.exclude group: 'com.alibaba', module: 'arouter-api'
 }
 dependencies {
-	 api "com.github.hss01248:arouter-api-onActivitResult:1.5.0-001"
+	 api "com.github.hss01248:arouter-api-onActivitResult:1.5.0-002"
 }
 ```
 
@@ -69,5 +71,16 @@ NavigationCallback里增加了onActivityResult(int requestCode, int resultCode, 
             }
         });
 
+
+
+
+
+# Log for IProvider and NavigationCallback:
+
+![image-20210115104656120](https://gitee.com/hss012489/picbed/raw/master/picgo/1610678821813-image-20210115104656120.jpg)
+
+D/ARouter: HelloServiceImpl@668af7f.sayHello(Vergil), result:hello, Vergil, cost:0ms ,thread:main
+
 ## 参考:
+
 https://github.com/xiaojinzi123/Component/wiki/Component-%E5%92%8C-ARouter-%E6%AF%94%E8%BE%83

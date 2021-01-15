@@ -18,6 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import com.alibaba.android.arouter.LogProxy;
 import com.alibaba.android.arouter.core.InstrumentationHook;
 import com.alibaba.android.arouter.core.LogisticsCenter;
 import com.alibaba.android.arouter.exception.HandlerException;
@@ -309,7 +310,8 @@ final class _ARouter {
             }
 
             LogisticsCenter.completion(postcard);
-            return (T) postcard.getProvider();
+            T t =  (T) postcard.getProvider();
+            return LogProxy.getProxy(t);
         } catch (NoRouteFoundException ex) {
             logger.warning(Consts.TAG, ex.getMessage());
             return null;

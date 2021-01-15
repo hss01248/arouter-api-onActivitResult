@@ -9,18 +9,26 @@ import android.util.Log;
 import android.view.View;
 
 import com.alibaba.android.arouter.facade.Postcard;
+import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.callback.NavigationCallback;
 import com.alibaba.android.arouter.launcher.ARouter;
 
 public class MainActivity extends AppCompatActivity {
 
+    @Autowired
+    HelloService helloService;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ARouter.getInstance().inject(this);
         setContentView(R.layout.activity_main);
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                helloService.sayHello("Vergil");
+
                 ARouter.getInstance().build("/test/activity")
                         .withLong("key1", 666L)
                         .withString("key3", "888")
@@ -52,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                         });
 
-                 new TransFragmentUtil<OrderFragment,Integer>(MainActivity.this,9,"orderfrag").getFragment().startOrder();
+                // new TransFragmentUtil<OrderFragment,Integer>(MainActivity.this,9,"orderfrag").getFragment().startOrder();
             }
         });
     }
