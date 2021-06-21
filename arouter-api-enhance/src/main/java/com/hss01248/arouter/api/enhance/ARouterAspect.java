@@ -23,20 +23,10 @@ import org.aspectj.lang.reflect.MethodSignature;
 @Aspect
 public class ARouterAspect {
 
-
-    public static final String TAG = "routerAspect";
     @Around("execution(* com.alibaba.android.arouter.launcher._ARouter.startActivity(..))")
     public Object weaveJoinPoint(ProceedingJoinPoint joinPoint) throws Throwable {
-        MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
-        String className = methodSignature.getDeclaringType().getSimpleName();
-        String methodName = methodSignature.getName();
         Object[] args = joinPoint.getArgs();
-        //String funName = methodSignature.getMethod().getAnnotation(TimeSpend.class).value();
-        Log.v(TAG,"method begin:"+methodName );
-        //统计时间
-        long begin = System.currentTimeMillis();
         Object result = null;
-
 
         final int requestCode = (int) args[0];
         Context currentContext = (Context) args[1];

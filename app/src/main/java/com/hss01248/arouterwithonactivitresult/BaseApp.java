@@ -2,6 +2,8 @@ package com.hss01248.arouterwithonactivitresult;
 
 import android.app.Application;
 
+import androidx.multidex.MultiDexApplication;
+
 import com.alibaba.android.arouter.launcher.ARouter;
 
 
@@ -10,7 +12,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
  * author:hss
  * desription:
  */
-public class BaseApp extends Application {
+public class BaseApp extends MultiDexApplication {
 
     @Override
     public void onCreate() {

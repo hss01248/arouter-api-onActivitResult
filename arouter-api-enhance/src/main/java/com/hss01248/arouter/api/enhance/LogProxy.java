@@ -42,7 +42,7 @@ public class LogProxy {
                 sb.append(objName)
                         .append(".")
                         .append(method.getName())
-                        .append("(")
+                        .append("\n(")
                         .append(parms)
                         .append(")");
 
@@ -73,7 +73,7 @@ public class LogProxy {
         String str = sb.toString();
 
         if("main".equals(Thread.currentThread().getName()) && cost> 50){
-            Log.i("ARouter",str);
+            Log.v("ARouter",str);
         }else if(str.contains(EXCEPTION_DESC)){
             Log.w("ARouter",str);
         } else {
