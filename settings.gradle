@@ -1,2 +1,3 @@
-include ':app', ':arouter-api'
+include ':arouter-api-enhance'
+include ':app'//, ':arouter-api'
 rootProject.name='arouterwithonactivitresult'

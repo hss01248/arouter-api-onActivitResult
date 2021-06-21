@@ -306,6 +306,7 @@ public class LogisticsCenter {
                         }
                     }
                     postcard.setProvider(LogProxy.getProxy(instance));
+                    //postcard.setProvider(instance);
                     postcard.greenChannel();    // Provider should skip all of interceptors
                     break;
                 case FRAGMENT:
