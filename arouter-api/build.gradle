@@ -14,7 +14,7 @@ android {
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 29
+        targetSdkVersion 30
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -24,8 +24,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     buildTypes {
@@ -44,7 +44,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
     //api 'com.github.VictorAlbertos:RxActivityResult:0.5.0-2.x'
    // api 'io.reactivex.rxjava2:rxjava:2.2.3'
-    api 'com.github.hss01248.StartActivityResult:activityresult:1.0.1'
+    api 'com.github.hss01248.StartActivityResult:activityresult:1.1.5'
 
 }
 

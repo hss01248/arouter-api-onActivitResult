@@ -16,12 +16,12 @@ public interface InterceptorCallback {
      *
      * @param postcard route meta
      */
-    void onContinue(Postcard postcard);
+   default void onContinue(Postcard postcard){}
 
     /**
      * Interrupt process, pipeline will be destroy when this method called.
      *
      * @param exception Reson of interrupt.
      */
-    void onInterrupt(Throwable exception);
+   default void onInterrupt(Throwable exception){}
 }

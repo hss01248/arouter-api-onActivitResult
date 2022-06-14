@@ -17,28 +17,28 @@ public interface NavigationCallback {
      *
      * @param postcard meta
      */
-    void onFound(Postcard postcard);
+   default void onFound(Postcard postcard){}
 
     /**
      * Callback after lose your way.
      *
      * @param postcard meta
      */
-    void onLost(Postcard postcard);
+    default void onLost(Postcard postcard){}
 
     /**
      * Callback after navigation.
      *
      * @param postcard meta
      */
-    void onArrival(Postcard postcard);
+    default void onArrival(Postcard postcard){}
 
     /**
      * Callback on interrupt.
      *
      * @param postcard meta
      */
-    void onInterrupt(Postcard postcard);
+    default void onInterrupt(Postcard postcard){}
 
-    void onActivityResult(int requestCode, int resultCode, Intent data);
+     void onActivityResult(int requestCode, int resultCode, Intent data);
 }
